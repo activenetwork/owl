@@ -1,0 +1,4 @@
+= Owl
+
+Owl is a simple site monitoring tool. A Ruby process runs in the background, pinging servers.
+The Rails app is the interface to view monitors, add new ones, etc.

@@ -1,0 +1,219 @@
+html {
+  background-color: #e6e1c7;
+  color: #333333;
+}
+
+h1 {
+  margin: 1em 0 0;
+}
+h1 a {
+  display: block;
+  width: 211px;
+  height: 110px;
+  background: transparent url('../images/logo.png') top left no-repeat;
+}
+h1 a span {
+  display: none;
+}
+
+#sites {
+  margin: 1em 5em;
+}
+#sites .site {
+  width: 100%;
+  background-color: #5e3500;
+  -moz-border-radius: 8px;
+  -webkit-border-radius: 8px;
+  margin: 2em 0 1em;
+  padding: 1em 1.5em 1.5em;
+}
+#sites .site h2 {
+  font-size: 200%;
+  font-weight: bold;
+  margin: 0 0 .4em;
+  color: #ffffff;
+  text-shadow: 2px 2px 2px rgba(0,0,0,.6);
+}
+#sites .site h2 a {
+  color: #ffffff;
+  text-decoration: none;
+}
+#sites .site .watch {
+  cursor: pointer;
+  margin: 0 0 .3em;
+  background-color: transparent;
+  color: #ffffff;
+  -moz-border-radius: 6px;
+  -webkit-border-radius: 6px;
+  overflow: hidden;
+}
+#sites .site .watch div {
+  padding: .5em 1em;
+  float: left;
+}
+#sites .site .watch div span {
+  display: block;
+}
+#sites .site .watch div.name span.full_name {
+  display: none;
+}
+#sites .site .watch div.name span.name {
+  font-size: 167%;
+  text-shadow: 1px 1px 2px rgba(0,0,0,.6);
+}
+#sites .site .watch div.name span.full_url {
+  display: none;
+}
+#sites .site .watch div.name span.url {
+  font-size: 100%;
+}
+#sites .site .watch div.name a {
+  color: #ffffff;
+  color: rgba(255,255,255,.6);
+}
+#sites .site .watch div.name a:hover {
+  color: #ffffff;
+  color: rgba(255,255,255,1);
+}
+#sites .site .watch div.status {
+  width: 80px;
+  text-align: center;
+  float: right;
+}
+#sites .site .watch div.status span.status {
+  font-weight: bold;
+  font-size: 146.5%;
+  text-shadow: 1px 1px 2px rgba(0,0,0,.6);
+}
+#sites .site .watch div.status span.response {
+  font-size: 85%;
+}
+#sites .site .watch div.status span.since_date {
+  display: none;
+}
+#sites .site .watch div.status a {
+  color: #ffffff;
+}
+#sites .site .watch div.graph {
+  width: 245px;
+  text-align: right;
+  float: right;
+}
+#sites .site .watch div.graph ul {
+  font-size: 85%;
+  margin: 0 0.5em;
+}
+#sites .site .watch div.graph ul li {
+  display: inline;
+  padding: 0 0.5em;
+}
+#sites .site .watch div.graph ul li.current {
+  background-color: rgba(255,255,255,1);
+  -moz-border-radius: 2px 2px 0 0;
+  -webkit-border-radius: 2px 2px 0 0;
+}
+#sites .site .watch div.graph ul li.current a {
+  color: #638562;
+}
+#sites .site .watch div.graph ul li.current a:hover {
+  color: #638562;
+}
+#sites .site .watch div.graph ul li a {
+  color: rgba(255,255,255,.6);
+  text-decoration: none;
+  outline: none;
+}
+#sites .site .watch div.graph ul li a:hover {
+  color: rgba(255,255,255,1);
+}
+#sites .site .watch div.graph img {
+  display: block;
+  padding: .3em;
+  background-color: #ffffff;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+}
+#sites .site .watch.up {
+  background-color: #638562;
+}
+#sites .site .watch.up:hover {
+  background-color: #7A9F78;
+}
+#sites .site .watch.down {
+  background-color: #921C1C;
+}
+#sites .site .watch.down:hover {
+  background-color: #AE2D2D;
+}
+#sites .site .watch.disabled {
+  background-color: #aaaaaa;
+}
+#sites .site .watch.disabled:hover {
+  background-color: #999999;
+}
+#sites .site .watch.unknown {
+  background-color: #666666;
+}
+#sites .site .watch.unknown:hover {
+  background-color: #555555;
+}
+#sites .site .watch.warning {
+  background-color: #EEBD4E;
+}
+#sites .site .watch.warning:hover {
+  background-color: #FFC02F;
+}
+#sites .new_watch {
+  font-size: 108%;
+  background-color: #009900;
+  margin: 0.5em 0 0;
+  float: right;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -moz-box-shadow: 2px 2px 2px rgba(0,0,0,.3);
+  -webkit-box-shadow: 2px 2px 2px rgba(0,0,0,.3);
+}
+#sites .new_watch:hover {
+  background-color: #04b502;
+}
+#sites .new_watch a {
+  color: #ffffff;
+  text-decoration: none;
+  display: block;
+  padding: 0.3em 1.5em;
+  text-shadow: 1px 1px 1px rgba(0,0,0,.6);
+}
+
+#add_site {
+  margin: 2em 5em;
+}
+#add_site h2 {
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  text-shadow: 2px 2px 2px rgba(0,0,0,.6);
+  background-color: #009900;
+  font-size: 200%;
+}
+#add_site h2:hover {
+  background-color: #04b502;
+}
+#add_site h2 a {
+  color: #ffffff;
+  text-decoration: none;
+  display: block;
+  padding: 0.5em 1em;
+}
+
+.delete {
+  color: #ffffff;
+  display: block;
+  float: right;
+  clear: both;
+  margin: 5em;
+  font-size: 116%;
+  background-color: #990000;
+  text-decoration: none;
+  padding: 0.2em 1em;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+}

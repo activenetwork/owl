@@ -1,0 +1,20 @@
+.name{:onclick => "location.href = '#{edit_watch_path(watch)}'"}
+  %span.site_name= watch.site.name
+  %span.full_name= watch.name
+  %span.name= watch.name
+  %span.full_url= watch.url
+  %span.url= link_to(watch.url, watch.url)
+
+- if mode == :extended
+  .graph
+    %ul
+      %li{:id => "watch_#{watch.id}_last_24"}= link_to_function 'Last 24 hours', "watchBlock.changeGraph(this, #{watch.id}, 'last_24')"
+      %li{:id => "watch_#{watch.id}_last_1"}= link_to_function 'Last hour', "watchBlock.changeGraph($(this), #{watch.id}, 'last_1')"
+    = image_tag(response_graph_watches_path + "/#{watch.id}", :alt => "Last 24 hours response times for #{watch.name}", :class => 'graph', :id => "watch_#{watch.id}_graph", :title => "Response times, last 24 hours")
+
+.status
+  %span.response_title Last:
+  %span.response= watch.last_response_time.to_s + " ms"
+  %span.since_title= watch.status.name + " for "
+  %span.since_text= time_ago_in_words(watch.last_status_change_at || watch.created_at)
+  %span.since_date= watch.last_status_change_at || watch.created_at
