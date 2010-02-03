@@ -12,6 +12,7 @@ class CreateWatches < ActiveRecord::Migration
       t.integer :site_id
       t.datetime :last_status_change_at
       t.string :status_reason
+      t.boolean :is_locked
       
       t.timestamps
     end

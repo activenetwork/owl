@@ -1,45 +1,75 @@
 # require_relative 'base'
 require 'rubygems'
 require 'httpclient'
+require 'benchmark'
 
 module Mouse
   class Engine
+    
+    # clear all db locks if we exit
+    trap(:INT) do 
+      clear_locks!
+      Mouse.logger.info "!! SIGINT caught, exiting at #{Time.now.to_s}\n"
+      exit
+    end
+    
+    # clear all db locks if we exit
+    trap(:TERM) do
+      clear_locks!
+      Mouse.logger.info "!! SIGTERM caught, exiting at #{Time.now.to_s}\n"
+      exit
+    end
+      
+    # clear all locks if the worker is exiting
+    def self.clear_locks!
+      Mouse.logger.debug("\n  Clearning all locks...\n")
+      Watch.update_all("is_locked = 'f'")
+    end
+    
 
     def initialize
       Mouse.logger.info("Engine started at #{Time.now.to_s}...")
     end
     
-    # For each meme, get each lookup and initialize the requisite file in /lib/crawlers (all included in Cralwer::Base below)
+
     def go
-      threads = []
-      responses = []
-      
       watches = Watch.active
       watches.each do |watch|
         Mouse.logger.debug("  - Checking watch #{watch.id}: #{watch.url}...")
-        begin
-          time = Time.now
-          http = HTTPClient.get(watch.url)
-          time = ((Time.now - time) * 1000).to_i
-          if http.status != watch.expected_response.code       # status code wasn't what was expected
-            down(watch, :time => time, :status_reason => "Response code #{http.status} did not match expected (#{watch.expected_response.code})", :message => 'Response codes do not match expected')
-          elsif watch.content_match && !http.body.content.match(watch.content_match)  # content on the page wasn't found
-            down(watch, :time => time, :status_reason => "Required content ('#{watch.content_match}') was not found on the page", :message => 'Required content not found on page')
-          else                                            # everything looks good, mark as up
-            up(watch, :http => http, :time => time)
+        watch.reload(:lock => true)
+        unless watch.is_locked?
+          begin
+            watch.update_attribute(:is_locked, true)    # lock this record
+            http = nil
+            time = Benchmark.realtime do
+              http = HTTPClient.get(watch.url)
+            end
+            if http.status != watch.expected_response.code       # status code wasn't what was expected
+              down(watch, :time => time, :status_reason => "Response code #{http.status} did not match expected (#{watch.expected_response.code})", :message => 'Response codes do not match expected')
+            elsif watch.content_match && !http.body.content.match(watch.content_match)  # content on the page wasn't found
+              down(watch, :time => time, :status_reason => "Required content ('#{watch.content_match}') was not found on the page", :message => 'Required content not found on page')
+            else                                            # everything looks good, mark as up
+              up(watch, :http => http, :time => time)
+            end
+          rescue SocketError => e                           # URL is invalid
+            down(watch, :status_reason => 'URL invalid', :message => 'URL is invalid')
+          rescue HTTPClient::ReceiveTimeoutError => e       # Apparently the uncatchable error
+            down(watch, :message => 'ReceiveTimeoutError')
+          rescue HTTPClient::ConnectTimeoutError => e       # Site isn't responding
+            down(watch, :status_reason => 'Timed out waiting for response', :message => 'Site not responding (timeout)')
+          rescue Errno::ECONNRESET => e
+            down(watch, :status_reason => 'Connection reset by peer', :message => 'Connection reset by peer')
+          ensure
+            watch.update_attribute(:is_locked, false)   # unlock this record
           end
-        rescue SocketError => e                           # URL is invalid
-          down(watch, :status_reason => 'URL invalid', :message => 'URL is invalid')
-        rescue HTTPClient::ReceiveTimeoutError => e       # Apparently the uncatchable error
-          down(watch, :message => 'ReceiveTimeoutError')
-        rescue HTTPClient::ConnectTimeoutError => e       # Site isn't responding
-          down(watch, :status_reason => 'Timed out waiting for response', :message => 'Site not responding (timeout)')
-        rescue Errno::ECONNRESET => e
-          down(watch, :status_reason => 'Connection reset by peer', :message => 'Connection reset by peer')
+        else
+          Mouse.logger.debug("    Locked, skipping");
         end
       end
       
       cleanup   # removes responses older than a day
+      Mouse.logger.debug("Wating #{Mouse.options.interval.seconds} seconds...\n--");
+      
     end
     
     
@@ -49,6 +79,7 @@ module Mouse
       def up(watch, options={})
         defaults = { :time => 0, :http => nil, :status_reason => 'Site responding normally' }
         options = defaults.merge!(options)
+        options[:time] = (options[:time] * 1000).round
         update_watch(watch, options[:time], Status::UP, options[:status_reason])
         response = add_response(watch, options[:time], options[:http].status, options[:http].reason)
         if Mouse.options.write_headers
@@ -104,6 +135,7 @@ module Mouse
         Mouse.logger.debug("Purging records older than #{Mouse.options.oldest} seconds.")
         Response.destroy_all ['created_at < ?', (Time.now - Mouse.options.oldest).to_s(:db)]
       end
+      
       
   end
 end
