@@ -4,7 +4,7 @@ require 'logger'
 module Mouse
   class Options
     
-    attr_reader :env, :log_level, :log_output, :interval, :write_headers, :oldest
+    attr_reader :env, :log_level, :log_output, :interval, :write_headers, :oldest, :site
     
     def initialize(argv)
       @env = 'development'
@@ -13,6 +13,7 @@ module Mouse
       @interval = 60
       @oldest = 86400
       @write_headers = false
+      @site = nil
       parse(argv)
     end
     
@@ -20,11 +21,7 @@ module Mouse
     def parse(argv)
       OptionParser.new do |opts|
         
-        opts.on("-d", "--debug", "Logs in verbose mode (this is default when running in development environment)") do
-          @log_level = Logger::DEBUG
-        end
-        
-        opts.on("-e [env]", "--environment [evn]", ['development', 'test', 'production'], "Rails environment development|test|production (default = development)") do |env|
+        opts.on("-e [env]", "--environment [env]", ['development', 'test', 'production'], "Rails environment development|test|production (default = development)") do |env|
           @env = env unless env.nil?
           case env
           when 'production'
@@ -37,8 +34,16 @@ module Mouse
           @interval = seconds.to_i unless seconds.nil?
         end
         
+        opts.on("-l", nil, "Logs in verbose mode (default when running in development environment)") do
+          @log_level = Logger::DEBUG
+        end
+        
         opts.on("-o [seconds]", "--oldest [seconds]", "Responses older than this are purged from the database (default is 86400 seconds [1 day])") do |seconds|
           @interval = seconds.to_i unless seconds.nil?
+        end
+        
+        opts.on("-s [site_id]", "--site [site_id]", "The ID of a single site/group to record responses for (default is all sites)") do |id|
+          @site = id
         end
         
         opts.on("-w", "--write-headers", "Write response headers to database") do

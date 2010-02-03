@@ -33,7 +33,17 @@ module Mouse
     
 
     def go
-      watches = Watch.active
+      if Mouse.options.site.nil?
+        watches = Watch.active 
+      else
+        begin
+          watches = Site.find(Mouse.options.site).watches
+        rescue ActiveRecord::RecordNotFound
+          Mouse.logger.error("Site #{Mouse.options.site} not found, exiting")
+          exit
+        end
+      end
+      
       watches.each do |watch|
         Mouse.logger.debug("  - Checking watch #{watch.id}: #{watch.url}...")
         watch.reload(:lock => true)
