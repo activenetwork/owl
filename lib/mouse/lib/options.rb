@@ -30,7 +30,7 @@ module Mouse
           end
         end
         
-        opts.on("-i [seconds]", "--interval [seconds]", "The interval to crawl at, in seconds (default is 10 seconds)") do |seconds|
+        opts.on("-i [seconds]", "--interval [seconds]", "The interval to crawl at, in seconds (default is #{@interval} seconds)") do |seconds|
           @interval = seconds.to_i unless seconds.nil?
         end
         
