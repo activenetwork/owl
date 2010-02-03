@@ -17,6 +17,8 @@ Rails::Initializer.run do |config|
   # Specify gems that this application depends on and have them installed with rake gems:install
   config.gem 'haml'
   config.gem 'httpclient'
+  config.gem 'system_timer'
+  config.gem 'memcache-client'
   #config.gem 'sparklines'
   #config.gem 'memcache-client', :lib => 'memcache'
   # config.gem "bj"
