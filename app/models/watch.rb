@@ -28,6 +28,15 @@ class Watch < ActiveRecord::Base
   end
   
   
+  def lock
+    self.update_attribute(:is_locked, true)
+  end
+  
+  
+  def unlock
+    self.update_attribute(:is_locked, false)
+  end
+  
   private
     
     def set_status

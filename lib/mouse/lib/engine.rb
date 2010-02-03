@@ -39,7 +39,7 @@ module Mouse
         watch.reload(:lock => true)
         unless watch.is_locked?
           begin
-            watch.update_attribute(:is_locked, true)    # lock this record
+            watch.lock
             http = nil
             time = Benchmark.realtime do
               http = HTTPClient.get(watch.url)
@@ -60,7 +60,7 @@ module Mouse
           rescue Errno::ECONNRESET => e
             down(watch, :status_reason => 'Connection reset by peer', :message => 'Connection reset by peer')
           ensure
-            watch.update_attribute(:is_locked, false)   # unlock this record
+            watch.unlock
           end
         else
           Mouse.logger.debug("    Locked, skipping");
