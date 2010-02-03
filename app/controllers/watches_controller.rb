@@ -6,11 +6,18 @@ class WatchesController < ApplicationController
   
   before_filter :get_graph_cookies, :only => :response_graph
   
+  layout 'admin'
+  
   # GET /watches
   # GET /watches.xml
   def index
-    @watches = Watch.all
-
+    
+    unless params[:site].nil? or params[:site].blank?
+      @watches = Site.find(params[:site]).watches
+    else
+      @watches = Watch.all
+    end
+    
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @watches }

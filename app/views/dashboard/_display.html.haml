@@ -3,7 +3,7 @@
     = render :partial => 'sites/site', :locals => { :site => site, :mode => local_assigns[:locals][:mode] }
 
 :javascript
-  new Ajax.PeriodicalUpdater('','#{watches_path(:format => 'json')}',
+  new Ajax.PeriodicalUpdater('','#{watches_path(:format => 'json', :site => params[:site] ? params[:site] : '')}',
                             { asynchronous:true,
                               method:'get',
                               frequency:10,

@@ -3,6 +3,8 @@
 
 = render 'display', :locals => { :sites => @sites, :mode => :compact }
 
+= link_to(image_tag('owl_peek.png', :id => 'peek'), root_path)
+
 :javascript
   Event.observe(window,'resize', resizePanels);
   Event.observe(window,'dom:loaded', resizePanels);

@@ -126,24 +126,29 @@ h1
         &:hover
           background-color: #FFC02F
   
-  .new_watch
+  h3
     font-size: 108%
-    background-color: #009900
-    margin: 0.5em 0 0
+    margin: 0.5em 0 0 0.5em
     float: right
     -moz-border-radius: 5px
     -webkit-border-radius: 5px
     -moz-box-shadow: 2px 2px 2px rgba(0,0,0,.3)
     -webkit-box-shadow: 2px 2px 2px rgba(0,0,0,.3)
-    &:hover
-      background-color: #04b502
     a
       color: #ffffff
       text-decoration: none
       display: block
       padding: 0.3em 1.5em
       text-shadow: 1px 1px 1px rgba(0,0,0,.6)
-      
+    &.new_watch
+      background-color: #009900
+      &:hover
+        background-color: #04b502
+    &.watch_only
+      background-color: #f7b825
+      &:hover
+        background-color: #e0a61b
+  
 #add_site
   margin: 2em 5em
   h2

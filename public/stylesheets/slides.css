@@ -1,3 +1,9 @@
+#peek {
+  position: absolute;
+  bottom: 0;
+  right: 20px;
+}
+
 h1 {
   display: none;
 }
@@ -65,6 +71,6 @@ h1 {
 #sites .site .watch div.graph {
   display: none;
 }
-#sites .site .new_watch {
+#sites .site h3 {
   display: none;
 }

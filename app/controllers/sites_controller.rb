@@ -1,6 +1,8 @@
 class SitesController < ApplicationController
   # GET /sites
   # GET /sites.xml
+  layout 'admin'
+  
   def index
     @sites = Site.all
     @mode = :extended
