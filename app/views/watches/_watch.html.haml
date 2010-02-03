@@ -7,12 +7,13 @@
   %span.full_url= watch.url
   %span.url= link_to(watch.url, watch.url)
 
-- if mode == :extended
-  .graph
-    %ul
-      %li{:id => "watch_#{watch.id}_last_24"}= link_to_function 'Last 24 hours', "watchBlock.changeGraph(this, #{watch.id}, 'last_24')"
-      %li{:id => "watch_#{watch.id}_last_1"}= link_to_function 'Last hour', "watchBlock.changeGraph($(this), #{watch.id}, 'last_1')"
-    = image_tag(response_graph_watches_path + "/#{watch.id}", :alt => "Last 24 hours response times for #{watch.name}", :class => 'graph', :id => "watch_#{watch.id}_graph", :title => "Response times, last 24 hours")
+/
+  - if mode == :extended
+    .graph
+      %ul
+        %li{:id => "watch_#{watch.id}_last_24"}= link_to_function 'Last 24 hours', "watchBlock.changeGraph(this, #{watch.id}, 'last_24')"
+        %li{:id => "watch_#{watch.id}_last_1"}= link_to_function 'Last hour', "watchBlock.changeGraph($(this), #{watch.id}, 'last_1')"
+      = image_tag(response_graph_watches_path + "/#{watch.id}", :alt => "Last 24 hours response times for #{watch.name}", :class => 'graph', :id => "watch_#{watch.id}_graph", :title => "Response times, last 24 hours")
 
 .status
   %span.response_title Last:
