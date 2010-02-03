@@ -21,7 +21,7 @@ module Mouse
     def parse(argv)
       OptionParser.new do |opts|
         
-        opts.on("-e [env]", "--environment [env]", ['development', 'test', 'production'], "Rails environment development|test|production (default = development)") do |env|
+        opts.on("-e [env]", "--environment [env]", ['development', 'test', 'production'], "Rails environment development|test|production (default is #{env})") do |env|
           @env = env unless env.nil?
           case env
           when 'production'
@@ -38,7 +38,7 @@ module Mouse
           @log_level = Logger::DEBUG
         end
         
-        opts.on("-o [seconds]", "--oldest [seconds]", "Responses older than this are purged from the database (default is 86400 seconds [1 day])") do |seconds|
+        opts.on("-o [seconds]", "--oldest [seconds]", "Responses older than this are purged from the database (default is #{oldest} seconds)") do |seconds|
           @interval = seconds.to_i unless seconds.nil?
         end
         
