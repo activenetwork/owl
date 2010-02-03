@@ -1,0 +1,24 @@
+= f.error_messages
+
+%fieldset
+  = f.label :name
+  = f.text_field :name
+
+  = f.label :url
+  = f.text_field :url
+
+  = f.label :warning_time
+  = f.text_field :warning_time
+  %span.example Number of milliseconds before the site is in the "warning" state (blinking)
+  
+%fieldset
+  = f.label :content_match
+  = f.text_field :content_match
+  %span.example A regular expression that is compared against the HTML returned from the site
+
+  = f.label :response_code_id, 'Expected Response'
+  = f.select :response_code_id, ResponseCode.all.map { |c| ["#{c.code} - #{c.name}",c.id] }
+  %span.example If the site does not return this response code, consider it down
+
+  = f.label :site_id
+  = f.select :site_id, Site.all.map { |s| [s.name,s.id] }

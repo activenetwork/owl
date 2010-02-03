@@ -3,7 +3,7 @@ class Watch < ActiveRecord::Base
   belongs_to :site
   belongs_to :status
   has_many :responses, :dependent => :destroy
-  belongs_to :expected_response, :class_name => 'ResponseCode', :foreign_key => 'response_id'
+  belongs_to :expected_response, :class_name => 'ResponseCode', :foreign_key => 'response_code_id'
   
   named_scope :active, :conditions => { :active => true }
   

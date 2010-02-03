@@ -1,0 +1,10 @@
+%h2 Editing watch
+
+- form_for(@watch) do |f|
+  = render :partial => 'form', :locals => { :f => f }
+  .save
+    = f.submit 'Update' 
+    or 
+    = link_to 'Cancel', :back
+    
+= link_to 'Delete this Watch', @watch, :confirm => 'Are you sure?', :method => :delete, :class => 'delete'

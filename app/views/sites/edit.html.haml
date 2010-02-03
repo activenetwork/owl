@@ -1,0 +1,17 @@
+#sites
+  %div.site
+    %h2 Editing Group
+
+    - form_for(@site) do |f|
+      = render :partial => 'form', :locals => { :f => f }
+      - @site.watches.each do |watch|
+        %div[watch]{:class => watch.status.css}
+          = render :partial => 'watches/watch', :locals => { :watch => watch }
+    
+      .save
+        = f.submit 'Update'
+        or
+        = link_to 'Cancel', :back
+
+    = link_to 'Delete this Group', @site, :confirm => 'Are you sure?', :method => :delete, :class => 'delete'
+  
