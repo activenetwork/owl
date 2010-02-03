@@ -13,9 +13,10 @@ class WatchesController < ApplicationController
   def index
     
     unless params[:site].nil? or params[:site].blank?
-      @watches = Site.find(params[:site]).watches
+      # lets you get watch status for multiple sites by passing ?site=1,2,3
+      @watches = Site.find(params[:site].split(',')).collect { |site| site.watches }.flatten
     else
-      @watches = Watch.all
+      @watches = Watch.active
     end
     
     respond_to do |format|
@@ -50,6 +51,7 @@ class WatchesController < ApplicationController
   # GET /watches/new.xml
   def new
     @watch = Watch.new
+    session[:return_to] = request.referer
 
     respond_to do |format|
       format.html # new.html.erb
@@ -60,6 +62,8 @@ class WatchesController < ApplicationController
   # GET /watches/1/edit
   def edit
     @watch = Watch.find(params[:id])
+    @page_title = "Editing #{@watch.name}"
+    session[:return_to] = request.referer
   end
 
   # POST /watches
@@ -70,7 +74,7 @@ class WatchesController < ApplicationController
     respond_to do |format|
       if @watch.save
         flash[:notice] = 'Watch was successfully created.'
-        format.html { redirect_to new_watch_path }
+        format.html { redirect_to session[:return_to] || root_path }
         format.xml  { render :xml => @watch, :status => :created, :location => @watch }
       else
         format.html { render :action => "new" }
@@ -87,7 +91,7 @@ class WatchesController < ApplicationController
     respond_to do |format|
       if @watch.update_attributes(params[:watch])
         flash[:notice] = 'Watch was successfully updated.'
-        format.html { redirect_to :controller => 'dashboard', :action => 'compact' }
+        format.html { redirect_to session[:return_to] || root_path }
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }
@@ -103,7 +107,7 @@ class WatchesController < ApplicationController
     @watch.destroy
 
     respond_to do |format|
-      format.html { redirect_to(watches_url) }
+      format.html { redirect_to(root_path) }
       format.xml  { head :ok }
     end
   end

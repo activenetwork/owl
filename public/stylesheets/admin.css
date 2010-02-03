@@ -1,4 +1,64 @@
+html {
+  background-color: #e6e1c7;
+  color: #333333;
+}
+
+body {
+  margin: 1em;
+}
+
+a.back {
+  font-size: 116%;
+  color: #5e3500;
+  margin-bottom: 1em;
+  display: block;
+}
+
 h2 {
-  font-size: 161.6%;
+  font-size: 300%;
   font-weight: bold;
+  margin-bottom: .1em;
+  color: #5e3500;
+}
+
+form fieldset {
+  width: 50%;
+  float: left;
+  overflow: hidden;
+}
+form label {
+  display: block;
+  font-weight: bold;
+  margin-top: 1em;
+  color: #5e3500;
+  font-size: 116%;
+}
+form input, form select {
+  display: block;
+  font-size: 131%;
+}
+form span.example {
+  color: #A78553;
+  display: block;
+  width: 19em;
+  font-size: 116%;
+}
+form .save {
+  padding: 2em 0 0;
+  float: none;
+  clear: left;
+  text-align: center;
+  font-size: 167%;
+}
+form .save input[type='submit'] {
+  display: inline;
+}
+
+.delete {
+  text-align: center;
+  margin: 2em 0 0;
+  font-size: 116%;
+}
+.delete a {
+  color: #990000;
 }

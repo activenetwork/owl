@@ -1,3 +1,5 @@
+- mode = :extended unless local_assigns[:mode]
+
 .name{:onclick => "location.href = '#{edit_watch_path(watch)}'"}
   %span.site_name= watch.site.name
   %span.full_name= watch.name

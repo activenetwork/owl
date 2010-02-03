@@ -13,8 +13,9 @@ class DashboardController < ApplicationController
   def compact
     @page_title = 'Dashboard'
     unless params[:site].nil? or params[:site].blank?
-      @page_title = Site.find(params[:site]).name + ' ' + @page_title
-      @sites = [Site.find(params[:site], :include => { :watches => :status })]
+      # lets you get watch status for multiple sites by passing ?site=1,2,3
+      @page_title = Site.find(params[:site].split(',')).collect { |site| site.name }.join(', ') + ' ' + @page_title
+      @sites = Site.find(params[:site].split(','), :include => { :watches => :status })
     else
       @sites = Site.all :include => { :watches => :status }
     end

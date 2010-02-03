@@ -21,8 +21,8 @@ module Mouse
           time = Time.now
           http = HTTPClient.get(watch.url)
           time = ((Time.now - time) * 1000).to_i
-          if http.status != watch.expected_response       # status code wasn't what was expected
-            down(watch, :time => time, :status_reason => "Response code #{http.status} did not match expected (#{watch.expected_response})", :message => 'Response codes do not match expected')
+          if http.status != watch.expected_response.code       # status code wasn't what was expected
+            down(watch, :time => time, :status_reason => "Response code #{http.status} did not match expected (#{watch.expected_response.code})", :message => 'Response codes do not match expected')
           elsif watch.content_match && !http.body.content.match(watch.content_match)  # content on the page wasn't found
             down(watch, :time => time, :status_reason => "Required content ('#{watch.content_match}') was not found on the page", :message => 'Required content not found on page')
           else                                            # everything looks good, mark as up
