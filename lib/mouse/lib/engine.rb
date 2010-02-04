@@ -54,10 +54,11 @@ module Mouse
             time = Benchmark.realtime do
               http = HTTPClient.get(watch.url)
             end
+            time = (time * 1000).round
             if http.status != watch.expected_response.code       # status code wasn't what was expected
-              down(watch, :time => time, :status_reason => "Response code #{http.status} did not match expected (#{watch.expected_response.code})", :message => 'Response codes do not match expected')
+              down(watch, :time => time, :http => http, :status_reason => "Response code #{http.status} did not match expected (#{watch.expected_response.code})", :message => 'Response codes do not match expected')
             elsif watch.content_match && !http.body.content.match(watch.content_match)  # content on the page wasn't found
-              down(watch, :time => time, :status_reason => "Required content ('#{watch.content_match}') was not found on the page", :message => 'Required content not found on page')
+              down(watch, :time => time, :http => http, :status_reason => "Required content ('#{watch.content_match}') was not found on the page", :message => 'Required content not found on page')
             else                                            # everything looks good, mark as up
               up(watch, :http => http, :time => time)
             end
@@ -78,7 +79,6 @@ module Mouse
       end
       
       cleanup   # removes responses older than a day
-      Mouse.logger.debug("Wating #{Mouse.options.interval.seconds} seconds...\n--");
       
     end
     
@@ -89,7 +89,6 @@ module Mouse
       def up(watch, options={})
         defaults = { :time => 0, :http => nil, :status_reason => 'Site responding normally' }
         options = defaults.merge!(options)
-        options[:time] = (options[:time] * 1000).round
         update_watch(watch, options[:time], Status::UP, options[:status_reason])
         response = add_response(watch, options[:time], options[:http].status, options[:http].reason)
         if Mouse.options.write_headers
@@ -107,20 +106,23 @@ module Mouse
         options = defaults.merge!(options)
         update_watch(watch, options[:time], Status::DOWN, options[:status_reason])
         response = add_response(watch, options[:time], options[:http] ? options[:http].status : 0, options[:http] ? options[:http].reason : 'error')
+        
+        # any alerts?
+        if watch.alerts
+          watch.alerts.each do |alert|
+            Mouse.logger.debug("    Queueing alert for #{alert.alert_handler.name} to #{alert.to}")
+            Delayed::Job.enqueue(eval("Alerts::#{alert.alert_handler.class_name}").new(alert.to, options[:message]))
+          end
+        end
+        
         Mouse.logger.error("  ** #{options[:message]}")
-      end
-      
-      
-      # sets a watch to be in the warning status
-      def warning(watch)
-        watch.update_attributes(:status_id => Status::WARNING)
       end
       
       
       # updates the watch record
       def update_watch(watch, time, status, status_reason)
         watch.status_id = status
-        watch.last_status_change_at = Time.zone.now.to_s(:db) if watch.changed?  # only updates the last status change
+        watch.last_status_change_at = Time.now.to_s(:db) if watch.changed?  # only updates the last status change
         watch.last_response_time = time
         watch.status_reason = status_reason
         return watch.save

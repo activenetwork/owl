@@ -1,4 +1,8 @@
 ActionController::Routing::Routes.draw do |map|
+  map.resources :alert_handlers
+
+  map.resources :alerts
+
   
   map.resources :watches, :collection => { :response_graph => :get }
 

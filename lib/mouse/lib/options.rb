@@ -39,7 +39,7 @@ module Mouse
         end
         
         opts.on("-o [seconds]", "--oldest [seconds]", "Responses older than this are purged from the database (default is #{oldest} seconds)") do |seconds|
-          @interval = seconds.to_i unless seconds.nil?
+          @oldest = seconds.to_i unless seconds.nil?
         end
         
         opts.on("-s [site_id]", "--site [site_id]", "The ID of a single site/group to record responses for (default is all sites)") do |id|

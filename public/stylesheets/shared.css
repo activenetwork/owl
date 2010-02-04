@@ -54,6 +54,21 @@ h1 a span {
 #sites .site .watch div span {
   display: block;
 }
+#sites .site .watch div.name span.site_id {
+  display: inline;
+  background-color: rgba(255,255,255,.3);
+  padding: 0 .3em;
+  -moz-border-radius: 0.5em;
+  -webkit-border-radius: 0.5em;
+  font-size: 93%;
+}
+#sites .site .watch div.name span.site_id a {
+  text-decoration: none;
+  color: #ffffff;
+}
+#sites .site .watch div.name span.site_name {
+  display: inline;
+}
 #sites .site .watch div.name span.full_name {
   display: none;
 }

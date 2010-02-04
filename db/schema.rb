@@ -9,7 +9,38 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091104233239) do
+ActiveRecord::Schema.define(:version => 20100203235137) do
+
+  create_table "alert_handlers", :force => true do |t|
+    t.string   "name"
+    t.string   "class_name"
+    t.string   "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "alerts", :force => true do |t|
+    t.integer  "watch_id"
+    t.integer  "alert_handler_id"
+    t.string   "to"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "delayed_jobs", :force => true do |t|
+    t.integer  "priority",   :default => 0
+    t.integer  "attempts",   :default => 0
+    t.text     "handler"
+    t.string   "last_error"
+    t.datetime "run_at"
+    t.datetime "locked_at"
+    t.datetime "failed_at"
+    t.string   "locked_by"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "delayed_jobs", ["locked_by"], :name => "index_delayed_jobs_on_locked_by"
 
   create_table "headers", :force => true do |t|
     t.string   "key"
@@ -35,16 +66,23 @@ ActiveRecord::Schema.define(:version => 20091104233239) do
     t.datetime "updated_at"
   end
 
+  add_index "responses", ["id"], :name => "id_idx", :unique => true
+  add_index "responses", ["watch_id"], :name => "watch_idx"
+
   create_table "sites", :force => true do |t|
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
+  add_index "sites", ["id"], :name => "sites_id_idx", :unique => true
+
   create_table "statuses", :force => true do |t|
     t.string "name"
     t.string "css"
   end
+
+  add_index "statuses", ["id"], :name => "statuses_id_idx", :unique => true
 
   create_table "watches", :force => true do |t|
     t.string   "name"
@@ -53,13 +91,17 @@ ActiveRecord::Schema.define(:version => 20091104233239) do
     t.integer  "warning_time"
     t.boolean  "active",                :default => true
     t.string   "content_match"
-    t.integer  "expected_response",     :default => 200
+    t.integer  "response_code_id",      :default => 200
     t.integer  "status_id",             :default => 1
     t.integer  "site_id"
     t.datetime "last_status_change_at"
     t.string   "status_reason"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "is_locked",             :default => false
   end
+
+  add_index "watches", ["id"], :name => "watches_id_idx", :unique => true
+  add_index "watches", ["site_id"], :name => "watches_site_id_idx"
 
 end

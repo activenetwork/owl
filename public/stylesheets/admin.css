@@ -21,6 +21,23 @@ h2 {
   color: #5e3500;
 }
 
+form #errorExplanation {
+  background-color: #990000;
+  color: #ffffff;
+  padding: 1em;
+}
+form #errorExplanation h2 {
+  font-size: 131%;
+  color: #ffffff;
+  margin-bottom: 1em;
+}
+form #errorExplanation ul {
+  margin: 1em 1em;
+  padding: 0 1em;
+}
+form #errorExplanation ul li {
+  list-style-type: square;
+}
 form fieldset {
   width: 50%;
   float: left;

@@ -1,0 +1,24 @@
+<h1>Editing alert_handler</h1>
+
+<% form_for(@alert_handler) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :name %><br />
+    <%= f.text_field :name %>
+  </p>
+  <p>
+    <%= f.label :class_name %><br />
+    <%= f.text_field :class_name %>
+  </p>
+  <p>
+    <%= f.label :description %><br />
+    <%= f.text_field :description %>
+  </p>
+  <p>
+    <%= f.submit 'Update' %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @alert_handler %> |
+<%= link_to 'Back', alert_handlers_path %>

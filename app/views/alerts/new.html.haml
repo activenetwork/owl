@@ -1,0 +1,8 @@
+%h2 New alert
+
+- form_for(@alert) do |f|
+  = render :partial => 'form', :locals => { :f => f }
+  .save
+    = f.submit 'Create'
+    or
+    = link_to 'Cancel', :back

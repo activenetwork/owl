@@ -1,0 +1,29 @@
+= f.error_messages
+
+= f.label :watch_id
+= f.select :watch_id, Watch.all.map { |w| [w.name,w.id] }, :include_blank => true
+
+= f.label :alert_handler_id
+= f.select :alert_handler_id, AlertHandler.all.map { |a| [a.name,a.id] }, { :include_blank => true }, :onchange => "showHideDescription(this.value);" 
+
+#to
+  = f.label :to
+  = f.text_field :to
+
+  - AlertHandler.all.each do |handler|
+    %div{ :id => "alert_description_#{handler.id}", :class => 'alert_description', :style => 'display:none' }
+      %span.example= handler.description
+      
+:javascript
+  function showHideDescription(id) {
+    $$('.alert_description').each(function(desc) { 
+      desc.hide() 
+    }); 
+    if (id != '') { 
+      $('to').show(); 
+      $('alert_description_'+id).show(); 
+    } else { 
+      $('to').hide();
+    }
+  }
+  window.onload = function() { showHideDescription($('alert_alert_handler_id').value) }

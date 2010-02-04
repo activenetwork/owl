@@ -4,6 +4,7 @@ class Watch < ActiveRecord::Base
   belongs_to :status
   has_many :responses, :dependent => :destroy
   belongs_to :expected_response, :class_name => 'ResponseCode', :foreign_key => 'response_code_id'
+  has_many :alerts, :dependent => :destroy
   
   named_scope :active, :conditions => { :active => true }
   
@@ -16,7 +17,7 @@ class Watch < ActiveRecord::Base
   # Computes the standard deviation for the last response time of this watch compared to a certain number of checks in the past.
   # By default we look at the average of the last 10 ten minute spans
   def from_average(interval=DEFAULT_INTERVAL)
-    average = Response.average(:time, :conditions => ['watch_id = ? and time != 0 and created_at < ? and created_at > ?', self.id, Time.zone.now.to_s(:db), (Time.zone.now-interval).to_s(:db)]).to_i
+    average = Response.average(:time, :conditions => ['watch_id = ? and time != 0 and created_at < ? and created_at > ?', self.id, Time.now.to_s(:db), (Time.now-interval).to_s(:db)]).to_i
     logger.debug("  *** average: #{average}, last_response_time: #{self.last_response_time}")
     return (average == 0 || last_response_time == 0) ? nil : (average.to_f / self.last_response_time.to_f * 100.0).to_i
   end

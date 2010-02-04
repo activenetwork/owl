@@ -1,0 +1,18 @@
+<p>
+  <b>Name:</b>
+  <%=h @alert_handler.name %>
+</p>
+
+<p>
+  <b>Class name:</b>
+  <%=h @alert_handler.class_name %>
+</p>
+
+<p>
+  <b>Description:</b>
+  <%=h @alert_handler.description %>
+</p>
+
+
+<%= link_to 'Edit', edit_alert_handler_path(@alert_handler) %> |
+<%= link_to 'Back', alert_handlers_path %>

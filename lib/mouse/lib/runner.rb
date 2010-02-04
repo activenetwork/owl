@@ -33,6 +33,7 @@ module Mouse
     def repeat
       every @options.interval.seconds do
         run
+        Mouse.logger.debug("Wating #{Mouse.options.interval.seconds} seconds...\n--");
       end
     end
     
