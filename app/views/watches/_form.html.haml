@@ -31,6 +31,14 @@
         = render :partial => 'alerts/alert', :locals => { :alert => alert, :i => i }
     - else
       No alerts.
-  
+      
     .button.add
       = link_to 'Add Alert', new_alert_path(:watch => watch.id), :class => 'add_alert'
+
+    - watches_with_alerts = Watch.all.reject { |w| w.alerts.empty? || w == watch }
+    - unless watches_with_alerts.empty?
+      .copy
+        %h4 Copy Alerts From
+        %ul
+          - watches_with_alerts.each do |w| 
+            %li= link_to("#{w.site.name}: #{w.name}", { :controller => 'watches', :action => 'copy', :from => w.id, :to => watch.id }, :confirm => 'This will clear any existing alerts on this watch. Are you sure?', :method => :post)

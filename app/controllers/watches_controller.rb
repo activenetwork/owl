@@ -163,6 +163,23 @@ class WatchesController < ApplicationController
     send_data png, :type => 'image/png', :disposition => 'inline'
   end
   
+  
+  # copies alerts from one watch to another
+  def copy
+    if request.post? && params[:from] && params[:to]
+      from = Watch.find(params[:from])
+      to = Watch.find(params[:to])
+      to.alerts.clear
+      from.alerts.each do |alert|
+        to.alerts.create(alert.attributes)
+      end
+      flash[:notice] = "Alerts copied"
+      redirect_to(edit_watch_path(to))
+    else
+      raise InvalidRequest, "Some parameters were missing from your request"
+    end
+  end
+  
   private
     
     def set_graph_cookies(id,type)

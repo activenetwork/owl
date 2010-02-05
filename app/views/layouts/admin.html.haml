@@ -11,6 +11,13 @@
     = yield :head  # if you want to add any other code to the head, add it via `content_for :head do` in any view and it'll end up here
       
   %body
+    - if flash[:notice]
+      #notice
+        %div
+          = flash[:notice]
+          :javascript
+            setTimeout(function() { Effect.SlideUp('notice', { duration:0.5 }) }, 5000);
+      
     = link_to '&laquo; Back to Dashboard', { :controller => 'dashboard' }, :class => 'back'
     = yield
     = yield :body

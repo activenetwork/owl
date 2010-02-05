@@ -35,6 +35,13 @@ h3 {
   color: #5e3500;
 }
 
+h4 {
+  font-size: 123.1%;
+  color: #5e3500;
+  font-weight: bold;
+  margin: 1em 0 0.3em;
+}
+
 form #errorExplanation {
   background-color: #990000;
   color: #ffffff;
@@ -77,6 +84,20 @@ form fieldset div.alert div.name {
 }
 form fieldset div.alert div.name a {
   color: #5e3500;
+}
+form fieldset div.alert div.remove {
+  float: right;
+  margin: 0.5em 0 0;
+}
+form fieldset div.copy {
+  clear: left;
+  margin: 3em 0 0;
+}
+form fieldset div.copy a {
+  color: #5e3500;
+}
+form fieldset div.copy ul li {
+  line-height: 1.5;
 }
 form label {
   display: block;

@@ -4,7 +4,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :alerts
 
   
-  map.resources :watches, :collection => { :response_graph => :get }
+  map.resources :watches, :collection => { :response_graph => :get, :copy => :post }
 
   map.resources :sites, :collection => { :slides => :get }
 

@@ -1,6 +1,8 @@
 %div[alert]
-  /.number= i+1
+  .remove
+    = link_to_remote(image_tag('delete.png'), :url => alert_path(alert), :success => "$('alert_#{alert.id}').fade();", :confirm => 'Are you sure?', :method => :delete)
   .name= link_to(alert.alert_handler.name, edit_alert_path(alert))
   .to
     %dfn{:title => alert.to}
       = pluralize(alert.to.split(',').length, 'person')
+    
