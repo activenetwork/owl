@@ -1,5 +1,5 @@
-%div[alert]
-  .remove
+%div[alert]{:onmouseover => "$(this).down('.remove').show()", :onmouseout => "$(this).down('.remove').hide()"}
+  .remove{:style => 'display:none'}
     = link_to_remote(image_tag('delete.png'), :url => alert_path(alert), :success => "$('alert_#{alert.id}').fade();", :confirm => 'Are you sure?', :method => :delete)
   .name= link_to(alert.alert_handler.name, edit_alert_path(alert))
   .to
