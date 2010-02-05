@@ -10,6 +10,8 @@
 require File.join(File.dirname(__FILE__), '/../../core_extensions')
 require_relative '../lib/runner'
 Dir.glob(File.join(File.dirname(__FILE__), 'alerts/*.rb')).each {|f| require_relative f }
+require 'benchmark'
+# mouse will automatically get any config.gem in config/environment.rb
 
 module Mouse
   

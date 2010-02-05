@@ -23,8 +23,9 @@ ResponseCode.create([ { :id => 1, :code => 200, :name => 'OK' },
                       { :id => 10, :code => 502, :name => 'Bad Gateway' },
                       { :id => 11, :code => 503, :name => 'Service Unavailable' }])
 
-AlertHandler.create([ { :id => 1, :name => 'Twitter', :class_name => 'Twitter', :description => "Will send a direct message to a comma-delimited list of Twitter usernames. Be sure to include the @ before each time (ex: @robcameron,@activenotify)" },
-                      { :id => 2, :name => 'Yammer', :class_name => 'Yammer', :description => "Will send a message to a comma-delimited list of Yammer usernames. Be sure to include the @ before each time (ex: @rob-cameron,@m&m)" },
-                      { :id => 3, :name => 'SMS', :class_name => 'SMS', :description => "Will send a text message to all phone numbers listed. Enter phone numbers without dashes (ex: 8585551234) and be sure to pick the correct carrier for each." },
-                      { :id => 4, :name => 'Email', :class_name => 'Email', :description => "Will send an email to a comma-delimited list of email addresses. (ex. rob.cameron@active.com,john.ramos@active.com)" }])
+AlertHandler.create([ { :id => 1, :name => 'Twitter', :class_name => 'Twitter', :description => "Will send a reply-type message (@username) to a comma-seperated list of Twitter usernames (ex: robcameron, activenotify)" },
+                      { :id => 2, :name => 'Yammer', :class_name => 'Yammer', :description => "Will send a message to a comma-seperated list of Yammer usernames (ex: john-doe, m&m)" },
+                      { :id => 3, :name => 'SMS', :class_name => 'SMS', :description => "Will send a text message to all phone numbers listed. Enter phone numbers without dashes, seperated by commas (ex: 8585551234,7605551234) and be sure to pick the correct carrier for each." },
+                      { :id => 4, :name => 'Email', :class_name => 'Email', :description => "Will send an email to a comma-seperated list of email addresses. (ex. john@active.com, rob@active.com)" },
+                      { :id => 5, :name => 'Instant Message', :class_name => 'InstantMessage', :description => 'Sends an IM to a comma-seperated list of GTalk users (ex. john@gmail.com, suzy@gmail.com) Note that all users must have accounts on <a href="http://www.google.com/talk">GTalk</a>.]' }])
                       

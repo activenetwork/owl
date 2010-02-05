@@ -8,6 +8,8 @@ class Watch < ActiveRecord::Base
   
   named_scope :active, :conditions => { :active => true }
   
+  validates_presence_of :name, :site, :url, :response_code_id
+  
   before_save :set_status
   
   DEFAULT_INTERVAL = 1.hour

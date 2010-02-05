@@ -4,6 +4,9 @@ class CreateStatuses < ActiveRecord::Migration
       t.string :name
       t.string :css   # CSS class name
     end
+    
+    add_index :statuses, :id, :unique => true
+    
   end
 
   def self.down

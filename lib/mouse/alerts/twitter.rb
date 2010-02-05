@@ -1,11 +1,20 @@
 module Mouse
   module Alerts
-    class Twitter < Struct.new(:usernames, :message)
+    class Twitter
       
-      API_KEY = ''
+      include HTTParty
+      base_uri 'twitter.com'
+      basic_auth 'activeowl','cyg-pim-lo'
+      
+      def initialize(usernames, message)
+        @usernames = usernames.split(',').collect(&:chomp)
+        @message = message
+      end
       
       def perform
-        
+        @usernames.each do |username|
+          self.class.post('/statuses/update.json', :query => {:status => "@#{username} #{@message}"})
+        end
       end
       
     end

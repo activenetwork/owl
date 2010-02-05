@@ -11,8 +11,20 @@ a.back
   margin-bottom: 1em
   display: block
   
+dfn
+  border-bottom: 1px dotted #C89F69
+  cursor: help
+  
 h2
-  font-size: 300%
+  font-size: 200%
+  font-weight: bold
+  margin-bottom: 0.5em
+  padding-bottom: 0.5em
+  color: #5e3500
+  border-bottom: 1px dashed #C89F69
+    
+h3
+  font-size: 161%
   font-weight: bold
   margin-bottom: .1em
   color: #5e3500
@@ -33,9 +45,27 @@ form
         list-style-type: square
         
   fieldset
-    width: 50%
+    width: 33%
     float: left
     overflow: hidden
+    &.alerts
+      width: 30%
+      background-color: #cbbfa0
+      padding: 1em
+      -moz-border-radius: 10px
+      -webkit-border-radius: 10px
+    div.alert
+      overflow: auto
+      background-color: #e6e1c7
+      -moz-border-radius: 4px
+      -webkit-border-radius: 4px
+      margin: 0.5em 0
+      padding: 0.5em
+      div
+        &.name
+          font-weight: bold
+          a
+            color: #5e3500
     
   label
     display: block
@@ -59,7 +89,7 @@ form
     float: none
     clear: left
     text-align: center
-    font-size: 167%
+    font-size: 131%
     
     input[type='submit']
       display: inline

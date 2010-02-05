@@ -14,8 +14,22 @@ a.back {
   display: block;
 }
 
+dfn {
+  border-bottom: 1px dotted #C89F69;
+  cursor: help;
+}
+
 h2 {
-  font-size: 300%;
+  font-size: 200%;
+  font-weight: bold;
+  margin-bottom: 0.5em;
+  padding-bottom: 0.5em;
+  color: #5e3500;
+  border-bottom: 1px dashed #C89F69;
+}
+
+h3 {
+  font-size: 161%;
   font-weight: bold;
   margin-bottom: .1em;
   color: #5e3500;
@@ -39,9 +53,30 @@ form #errorExplanation ul li {
   list-style-type: square;
 }
 form fieldset {
-  width: 50%;
+  width: 33%;
   float: left;
   overflow: hidden;
+}
+form fieldset.alerts {
+  width: 30%;
+  background-color: #cbbfa0;
+  padding: 1em;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+}
+form fieldset div.alert {
+  overflow: auto;
+  background-color: #e6e1c7;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  margin: 0.5em 0;
+  padding: 0.5em;
+}
+form fieldset div.alert div.name {
+  font-weight: bold;
+}
+form fieldset div.alert div.name a {
+  color: #5e3500;
 }
 form label {
   display: block;
@@ -65,7 +100,7 @@ form .save {
   float: none;
   clear: left;
   text-align: center;
-  font-size: 167%;
+  font-size: 131%;
 }
 form .save input[type='submit'] {
   display: inline;

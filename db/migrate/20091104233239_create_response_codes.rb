@@ -6,6 +6,9 @@ class CreateResponseCodes < ActiveRecord::Migration
 
       t.timestamps
     end
+    
+    add_index :response_codes, :id, :unique => true
+    
   end
 
   def self.down

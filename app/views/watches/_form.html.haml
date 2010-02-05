@@ -1,17 +1,20 @@
 = f.error_messages
 
 %fieldset
+  = f.label :site_id, 'Group'
+  = f.select :site_id, Site.all.map { |s| [s.name,s.id] }, :prompt => 'Choose Group...'
+
   = f.label :name
   = f.text_field :name
 
   = f.label :url
   = f.text_field :url
 
+%fieldset
   = f.label :warning_time
   = f.text_field :warning_time
   %span.example Number of milliseconds before the site is in the "warning" state (blinking)
-  
-%fieldset
+
   = f.label :content_match
   = f.text_field :content_match
   %span.example A regular expression that is compared against the HTML returned from the site
@@ -20,5 +23,14 @@
   = f.select :response_code_id, ResponseCode.all.map { |c| ["#{c.code} - #{c.name}",c.id] }
   %span.example If the site does not return this response code, consider it down
 
-  = f.label :site_id
-  = f.select :site_id, Site.all.map { |s| [s.name,s.id] }
+- if params[:action] == 'edit'
+  %fieldset.alerts
+    %h3 Alerts
+    - unless watch.alerts.empty?
+      - watch.alerts.each_with_index do |alert,i|
+        = render :partial => 'alerts/alert', :locals => { :alert => alert, :i => i }
+    - else
+      No alerts.
+  
+    .button.add
+      = link_to 'Add Alert', new_alert_path(:watch => watch.id), :class => 'add_alert'

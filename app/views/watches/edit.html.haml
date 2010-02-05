@@ -1,9 +1,9 @@
-%h2 Editing watch
+%h2= @page_title
 
 - form_for(@watch) do |f|
-  = render :partial => 'form', :locals => { :f => f }
+  = render :partial => 'form', :locals => { :f => f, :watch => @watch }
   .save
-    = f.submit 'Update' 
+    = f.submit 'Save' 
     or 
     = link_to 'Cancel', :back
     

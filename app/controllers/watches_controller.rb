@@ -50,9 +50,9 @@ class WatchesController < ApplicationController
   # GET /watches/new
   # GET /watches/new.xml
   def new
-    @watch = Watch.new
+    @watch = Watch.new(:site_id => params[:site])
     session[:return_to] = request.referer
-
+    
     respond_to do |format|
       format.html # new.html.erb
       format.xml  { render :xml => @watch }
@@ -62,7 +62,7 @@ class WatchesController < ApplicationController
   # GET /watches/1/edit
   def edit
     @watch = Watch.find(params[:id])
-    @page_title = "Editing #{@watch.name}"
+    @page_title = "Editing #{@watch.name} Watch"
     session[:return_to] = request.referer
   end
 
@@ -74,8 +74,13 @@ class WatchesController < ApplicationController
     respond_to do |format|
       if @watch.save
         flash[:notice] = 'Watch was successfully created.'
-        format.html { redirect_to session[:return_to] || root_path }
-        format.xml  { render :xml => @watch, :status => :created, :location => @watch }
+        if params[:commit] == 'Create and Add Another'
+          format.html { redirect_to new_watch_path(:site => @watch.site.id) }
+          format.xml  { render :xml => @watch, :status => :created, :location => @watch }
+        else
+          format.html { redirect_to root_path }
+          format.xml  { render :xml => @watch, :status => :created, :location => @watch }
+        end
       else
         format.html { render :action => "new" }
         format.xml  { render :xml => @watch.errors, :status => :unprocessable_entity }
@@ -91,7 +96,7 @@ class WatchesController < ApplicationController
     respond_to do |format|
       if @watch.update_attributes(params[:watch])
         flash[:notice] = 'Watch was successfully updated.'
-        format.html { redirect_to session[:return_to] || root_path }
+        format.html { redirect_to root_path }
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }

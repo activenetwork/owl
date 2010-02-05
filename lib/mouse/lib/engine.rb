@@ -1,8 +1,3 @@
-# require_relative 'base'
-require 'rubygems'
-require 'httpclient'
-require 'benchmark'
-
 module Mouse
   class Engine
     
@@ -56,20 +51,20 @@ module Mouse
             end
             time = (time * 1000).round
             if http.status != watch.expected_response.code       # status code wasn't what was expected
-              down(watch, :time => time, :http => http, :status_reason => "Response code #{http.status} did not match expected (#{watch.expected_response.code})", :message => 'Response codes do not match expected')
+              down(watch, :time => time, :http => http, :status_reason => "Response code #{http.status} did not match expected (#{watch.expected_response.code})")
             elsif watch.content_match && !http.body.content.match(watch.content_match)  # content on the page wasn't found
-              down(watch, :time => time, :http => http, :status_reason => "Required content ('#{watch.content_match}') was not found on the page", :message => 'Required content not found on page')
+              down(watch, :time => time, :http => http, :status_reason => "Required content ('#{watch.content_match}') was not found on the page")
             else                                            # everything looks good, mark as up
               up(watch, :http => http, :time => time)
             end
           rescue SocketError => e                           # URL is invalid
-            down(watch, :status_reason => 'URL invalid', :message => 'URL is invalid')
+            down(watch, :status_reason => 'URL is invalid')
           rescue HTTPClient::ReceiveTimeoutError => e       # Apparently the uncatchable error
-            down(watch, :message => 'ReceiveTimeoutError')
+            down(watch, :status_reason => 'ReceiveTimeoutError')
           rescue HTTPClient::ConnectTimeoutError => e       # Site isn't responding
-            down(watch, :status_reason => 'Timed out waiting for response', :message => 'Site not responding (timeout)')
+            down(watch, :status_reason => 'Timed out waiting for response')
           rescue Errno::ECONNRESET => e
-            down(watch, :status_reason => 'Connection reset by peer', :message => 'Connection reset by peer')
+            down(watch, :status_reason => 'Connection reset by peer')
           ensure
             watch.unlock
           end
@@ -91,6 +86,13 @@ module Mouse
         options = defaults.merge!(options)
         update_watch(watch, options[:time], Status::UP, options[:status_reason])
         response = add_response(watch, options[:time], options[:http].status, options[:http].reason)
+        
+        unless watch.alerts.empty?
+          watch.alerts.each do |alert|
+            alert.update_attribute(:is_outstanding, false)
+          end
+        end
+        
         if Mouse.options.write_headers
           Mouse.logger.debug("    Saving headers...")
           options[:http].header.get.each do |header|
@@ -102,20 +104,26 @@ module Mouse
     
       # called when a site is considered down
       def down(watch, options={})
-        defaults = { :time => 0, :http => nil, :status_reason => 'Site is down', :message => 'Error with response' }
+        defaults = { :time => 0, :http => nil, :status_reason => 'Site is down' }
         options = defaults.merge!(options)
         update_watch(watch, options[:time], Status::DOWN, options[:status_reason])
         response = add_response(watch, options[:time], options[:http] ? options[:http].status : 0, options[:http] ? options[:http].reason : 'error')
         
         # any alerts?
-        if watch.alerts
+        unless watch.alerts.empty?
           watch.alerts.each do |alert|
-            Mouse.logger.debug("    Queueing alert for #{alert.alert_handler.name} to #{alert.to}")
-            Delayed::Job.enqueue(eval("Alerts::#{alert.alert_handler.class_name}").new(alert.to, options[:message]))
+            unless alert.is_outstanding?
+              # only send out an alert if there isn't already one outstanding
+              Mouse.logger.debug("    Queueing alert for #{alert.alert_handler.name} to #{alert.to}")
+              alert.update_attribute(:is_outstanding, true)
+              Delayed::Job.enqueue(eval("Alerts::#{alert.alert_handler.class_name}").new(alert.to, "Group: #{watch.site.name}, Watch: #{watch.name}: #{options[:status_reason]}"))
+            else
+              Mouse.logger.debug("    Outstanding alert, skipping queue to #{alert.alert_handler.name}")
+            end
           end
         end
         
-        Mouse.logger.error("  ** #{options[:message]}")
+        Mouse.logger.error("  ** #{options[:status_reason]}")
       end
       
       

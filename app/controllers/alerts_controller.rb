@@ -27,8 +27,12 @@ class AlertsController < ApplicationController
   # GET /alerts/new
   # GET /alerts/new.xml
   def new
-    @alert = Alert.new
-
+    @alert = Alert.new(:watch_id => params[:watch])
+    @page_title = "New Alert"
+    if params[:watch]
+      @page_title += " for #{@alert.watch.name}"
+    end
+    
     respond_to do |format|
       format.html # new.html.erb
       format.xml  { render :xml => @alert }
@@ -38,6 +42,7 @@ class AlertsController < ApplicationController
   # GET /alerts/1/edit
   def edit
     @alert = Alert.find(params[:id])
+    @page_title = "Editing #{@alert.alert_handler.name} Alert for #{@alert.watch.name}"
   end
 
   # POST /alerts
@@ -47,6 +52,10 @@ class AlertsController < ApplicationController
 
     respond_to do |format|
       if @alert.save
+        # notify everyone added to this alert if it's an IM
+        if @alert.type == :instant_message
+          notify_alertees(@alert)
+        end
         flash[:notice] = 'Alert was successfully created.'
         format.html { redirect_to(edit_watch_path(@alert.watch)) }
         format.xml  { render :xml => @alert, :status => :created, :location => @alert }
@@ -64,8 +73,11 @@ class AlertsController < ApplicationController
 
     respond_to do |format|
       if @alert.update_attributes(params[:alert])
+        if @alert.type == :instant_message
+          notify_alertees(@alert)
+        end
         flash[:notice] = 'Alert was successfully updated.'
-        format.html { redirect_to(@alert) }
+        format.html { redirect_to(edit_watch_path(@alert.watch)) }
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }
@@ -85,4 +97,10 @@ class AlertsController < ApplicationController
       format.xml  { head :ok }
     end
   end
+  
+  private
+  
+    def notify_alertees(alert)
+      Delayed::Job.enqueue(Mouse::Alerts::InstantMessage.new(alert.to, "You have been added as someone to notify if there is a problem with the following service - #{alert.watch.site.name}: #{alert.watch.name}"))
+    end
 end

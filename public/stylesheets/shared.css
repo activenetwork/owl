@@ -178,7 +178,8 @@ h1 a span {
 #sites .site .watch.warning:hover {
   background-color: #FFC02F;
 }
-#sites h3 {
+
+.button {
   font-size: 108%;
   margin: 0.5em 0 0 0.5em;
   float: right;
@@ -187,23 +188,23 @@ h1 a span {
   -moz-box-shadow: 2px 2px 2px rgba(0,0,0,.3);
   -webkit-box-shadow: 2px 2px 2px rgba(0,0,0,.3);
 }
-#sites h3 a {
+.button a {
   color: #ffffff;
   text-decoration: none;
   display: block;
   padding: 0.3em 1.5em;
   text-shadow: 1px 1px 1px rgba(0,0,0,.6);
 }
-#sites h3.new_watch {
+.button.add {
   background-color: #009900;
 }
-#sites h3.new_watch:hover {
+.button.add:hover {
   background-color: #04b502;
 }
-#sites h3.watch_only {
+.button.watch_only {
   background-color: #f7b825;
 }
-#sites h3.watch_only:hover {
+.button.watch_only:hover {
   background-color: #e0a61b;
 }
 

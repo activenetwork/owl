@@ -7,6 +7,10 @@ class CreateHeaders < ActiveRecord::Migration
 
       t.timestamps
     end
+    
+    add_index :headers, :id, :unique => true
+    add_index :headers, :response_id, :unique => true
+    
   end
 
   def self.down

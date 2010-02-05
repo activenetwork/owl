@@ -19,6 +19,8 @@ ActiveRecord::Schema.define(:version => 20100203235137) do
     t.datetime "updated_at"
   end
 
+  add_index "alert_handlers", ["id"], :name => "index_alert_handlers_on_id", :unique => true
+
   create_table "alerts", :force => true do |t|
     t.integer  "watch_id"
     t.integer  "alert_handler_id"
@@ -26,6 +28,10 @@ ActiveRecord::Schema.define(:version => 20100203235137) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "alerts", ["alert_handler_id"], :name => "index_alerts_on_alert_handler_id"
+  add_index "alerts", ["id"], :name => "index_alerts_on_id", :unique => true
+  add_index "alerts", ["watch_id"], :name => "index_alerts_on_watch_id"
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -50,12 +56,17 @@ ActiveRecord::Schema.define(:version => 20100203235137) do
     t.datetime "updated_at"
   end
 
+  add_index "headers", ["id"], :name => "index_headers_on_id", :unique => true
+  add_index "headers", ["response_id"], :name => "index_headers_on_response_id", :unique => true
+
   create_table "response_codes", :force => true do |t|
     t.integer  "code"
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "response_codes", ["id"], :name => "index_response_codes_on_id", :unique => true
 
   create_table "responses", :force => true do |t|
     t.integer  "time"
@@ -66,8 +77,8 @@ ActiveRecord::Schema.define(:version => 20100203235137) do
     t.datetime "updated_at"
   end
 
-  add_index "responses", ["id"], :name => "id_idx", :unique => true
-  add_index "responses", ["watch_id"], :name => "watch_idx"
+  add_index "responses", ["id"], :name => "index_responses_on_id", :unique => true
+  add_index "responses", ["watch_id"], :name => "index_responses_on_watch_id"
 
   create_table "sites", :force => true do |t|
     t.string   "name"
@@ -75,14 +86,14 @@ ActiveRecord::Schema.define(:version => 20100203235137) do
     t.datetime "updated_at"
   end
 
-  add_index "sites", ["id"], :name => "sites_id_idx", :unique => true
+  add_index "sites", ["id"], :name => "index_sites_on_id", :unique => true
 
   create_table "statuses", :force => true do |t|
     t.string "name"
     t.string "css"
   end
 
-  add_index "statuses", ["id"], :name => "statuses_id_idx", :unique => true
+  add_index "statuses", ["id"], :name => "index_statuses_on_id", :unique => true
 
   create_table "watches", :force => true do |t|
     t.string   "name"
@@ -91,17 +102,17 @@ ActiveRecord::Schema.define(:version => 20100203235137) do
     t.integer  "warning_time"
     t.boolean  "active",                :default => true
     t.string   "content_match"
-    t.integer  "response_code_id",      :default => 200
+    t.integer  "response_code_id",      :default => 1
     t.integer  "status_id",             :default => 1
     t.integer  "site_id"
     t.datetime "last_status_change_at"
     t.string   "status_reason"
+    t.boolean  "is_locked"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "is_locked",             :default => false
   end
 
-  add_index "watches", ["id"], :name => "watches_id_idx", :unique => true
-  add_index "watches", ["site_id"], :name => "watches_site_id_idx"
+  add_index "watches", ["id"], :name => "index_watches_on_id", :unique => true
+  add_index "watches", ["site_id"], :name => "index_watches_on_site_id"
 
 end
