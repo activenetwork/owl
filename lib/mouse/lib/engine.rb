@@ -133,7 +133,12 @@ module Mouse
         watch.last_status_change_at = Time.now.to_s(:db) if watch.changed?  # only updates the last status change
         watch.last_response_time = time
         watch.status_reason = status_reason
-        return watch.save
+        begin
+          return watch.save
+        rescue SQLite3::BusyException => e
+          Mouse.logger.error("    SQLite reported database lock, retrying...")
+          retry
+        end
       end
       
       

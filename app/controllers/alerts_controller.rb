@@ -74,7 +74,8 @@ class AlertsController < ApplicationController
     respond_to do |format|
       if @alert.update_attributes(params[:alert])
         if @alert.type == :instant_message
-          notify_alertees(@alert)
+          # send people an initial instant message so that the ActiveOwl user gets added to their contact list
+          Delayed::Job.enqueue(Mouse::Alerts::InstantMessage.new(@alert.to, "You have been added as someone to notify if there is a problem with the following service - #{@alert.watch.site.name}: #{@alert.watch.name}"))
         end
         flash[:notice] = 'Alert was successfully updated.'
         format.html { redirect_to(edit_watch_path(@alert.watch)) }
@@ -98,9 +99,5 @@ class AlertsController < ApplicationController
     end
   end
   
-  private
-  
-    def notify_alertees(alert)
-      Delayed::Job.enqueue(Mouse::Alerts::InstantMessage.new(alert.to, "You have been added as someone to notify if there is a problem with the following service - #{alert.watch.site.name}: #{alert.watch.name}"))
-    end
+
 end
