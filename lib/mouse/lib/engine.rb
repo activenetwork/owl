@@ -65,6 +65,8 @@ module Mouse
             down(watch, :status_reason => 'Timed out waiting for response')
           rescue Errno::ECONNRESET => e
             down(watch, :status_reason => 'Connection reset by peer')
+          rescue Errno::ECONNREFUSED => e
+            down(watch, :status_reason => 'Connection refused')
           ensure
             watch.unlock
           end
