@@ -41,9 +41,9 @@ module Mouse
       
       watches.each do |watch|
         Mouse.logger.debug("  - Checking watch #{watch.id}: #{watch.url}...")
-        watch.reload(:lock => true)
-        unless watch.is_locked?
-          begin
+        begin
+          watch.reload(:lock => true)
+          unless watch.is_locked?
             watch.lock
             http = nil
             time = Benchmark.realtime do
@@ -57,21 +57,26 @@ module Mouse
             else                                            # everything looks good, mark as up
               up(watch, :http => http, :time => time)
             end
-          rescue SocketError => e                           # URL is invalid
-            down(watch, :status_reason => 'URL is invalid')
-          rescue HTTPClient::ReceiveTimeoutError => e       # Apparently the uncatchable error
-            down(watch, :status_reason => 'ReceiveTimeoutError')
-          rescue HTTPClient::ConnectTimeoutError => e       # Site isn't responding
-            down(watch, :status_reason => 'Timed out waiting for response')
-          rescue Errno::ECONNRESET => e
-            down(watch, :status_reason => 'Connection reset by peer')
-          rescue Errno::ECONNREFUSED => e
-            down(watch, :status_reason => 'Connection refused')
-          ensure
-            watch.unlock
+          else
+            Mouse.logger.debug("    Locked, skipping");
           end
-        else
-          Mouse.logger.debug("    Locked, skipping");
+        rescue SocketError => e                           # URL is invalid
+          down(watch, :status_reason => 'URL is invalid')
+        rescue HTTPClient::ReceiveTimeoutError => e       # Apparently the uncatchable error
+          down(watch, :status_reason => 'ReceiveTimeoutError')
+        rescue HTTPClient::ConnectTimeoutError => e       # Site isn't responding
+          down(watch, :status_reason => 'Timed out waiting for response')
+        rescue Errno::ECONNRESET => e
+          down(watch, :status_reason => 'Connection reset by peer')
+        rescue Errno::ECONNREFUSED => e
+          down(watch, :status_reason => 'Connection refused')
+        rescue Errno::EHOSTUNREACH => e
+          down(watch, :status_reason => 'Host unreachable')
+        rescue SQLite3::BusyException => e
+          Mouse.logger.error("    * Database locked, retrying...")
+          retry
+        ensure
+          watch.unlock
         end
       end
       
@@ -138,7 +143,10 @@ module Mouse
         begin
           return watch.save
         rescue SQLite3::BusyException => e
-          Mouse.logger.error("    SQLite reported database lock, retrying...")
+          Mouse.logger.error("    * SQLite reported database lock, retrying...")
+          retry
+        rescue ActiveRecord::StatementInvalid => e
+          Mouse.logger.error("    * SQLite reported database lock, retrying...")
           retry
         end
       end
