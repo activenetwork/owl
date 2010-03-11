@@ -167,8 +167,12 @@ module Mouse
       
       # removes any responses older than a given time
       def cleanup
-        Mouse.logger.debug("Purging records older than #{Mouse.options.oldest} seconds.")
-        Response.destroy_all ['created_at < ?', (Time.now - Mouse.options.oldest).to_s(:db)]
+        begin
+          Mouse.logger.debug("Purging records older than #{Mouse.options.oldest} seconds.")
+          Response.destroy_all ['created_at < ?', (Time.now - Mouse.options.oldest).to_s(:db)]
+        rescue
+          retry
+        end
       end
       
       
