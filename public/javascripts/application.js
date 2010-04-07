@@ -88,7 +88,7 @@ function getCookie(c_name) {
 // methods used by watches
 watchBlock = {
   
-  server_range:$R(50,120),
+  server_range:$R(25,120),
   colors:{ fast:new Color('2c8428'),
            slow:new Color('eebd4e') },
   
