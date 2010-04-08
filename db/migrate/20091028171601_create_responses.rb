@@ -11,6 +11,8 @@ class CreateResponses < ActiveRecord::Migration
     
     add_index :responses, :id, :unique => true
     add_index :responses, :watch_id
+    add_index :responses, :time
+    add_index :responses, :created_at
     
   end
 
