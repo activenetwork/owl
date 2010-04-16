@@ -4,7 +4,7 @@ module Mouse
       
       include HTTParty
       base_uri 'twitter.com'
-      basic_auth 'activeowl','cyg-pim-lo'
+      basic_auth 'username','password'
       
       def initialize(usernames, message)
         @usernames = usernames.split(',').collect(&:chomp)
