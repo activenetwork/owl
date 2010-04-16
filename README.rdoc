@@ -52,15 +52,19 @@ You can now start the frontend:
 
   script/server
   
-And then start Mouse:
+Now browse to Owl and start adding sites and watches: http://localhost:3000 You are now
+viewing the Dashboard.
+
+=== Mouse
+
+Mouse is the backend process that requests your pages and records their responses. To start
+mouse:
 
   lib/mouse/bin/mouse -i 30
   
 This tells Mouse to start crawling your watches every 30 seconds (you can call Mouse with
 -h to see available options).
 
-Now browse to Owl and start adding sites and watches: http://localhost:3000 You are now
-viewing the Dashboard.
 
 === Adding a Site
 
