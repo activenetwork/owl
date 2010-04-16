@@ -41,7 +41,7 @@ you will also run Delayed Job in the background to send you these alerts.
 === Frontend
 
 The Owl frontend is a Ruby on Rails website. Before you start it you will need to build the
-database and seed it with data. Copy @config/database_sample.yml@ to @config/database.yml@ 
+database and seed it with data. Copy `config/database_sample.yml` to `config/database.yml`
 and change the development/production settings to suit your environment. Next, run a couple
 of rake tasks to prepare the database:
   
