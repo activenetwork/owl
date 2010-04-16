@@ -87,7 +87,7 @@ name in your dashboard.
 
 Owl currently supports alerts via Twitter and Instant Message. You will need to start
 Delayed Job so that it can pull messages off the job queue and send them to you. See
-@lib/mouse/alerts@ for the job classes. These are configured in the job files themselves
+<tt>lib/mouse/alerts</tt> for the job classes. These are configured in the job files themselves
 so simply modify them to use your own Twitter and IM account connection info.
 
 SMS and Email notifications are stubbed out but have not been built as of this writing.
