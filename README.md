@@ -4,6 +4,20 @@ There are plenty of site monitoring tools out there, but we were looking for som
 little different. A way to determine, at a glance, the health of all of our servers. That's
 where Owl comes in.
 
+== Methodology
+
+Everything is relative. Owl shows you how your sites are responding compared to how they've
+been responding in the past.
+
+Owl is filled with lots of pretty colors. The chosen colors conform to Western traditions:
+green is good, yellow is a warning, red is bad. A site is considered to be responding normally
+when it's response time is within an acceptable percentage of the average response time for the
+last hour. So, let's say your site has been responding in an average of 500ms in the last hour.
+If it suddenly responds in 2000ms instead it will turn a bright yellow. The are lots of gradations
+between yellow and green and you can use this to get an idea of how your sites are responding.
+When you are setting up a watch (see Terminology below) you can influence when you see these 
+colors -- to a degree. See Adding a Watch under Usage below.
+
 == Terminology
 
 Owl centers around the concept of a "watch." A watch is one webpage that you want to monitor.
@@ -45,7 +59,29 @@ And then start Mouse:
 This tells Mouse to start crawling your watches every 30 seconds (you can call Mouse with
 -h to see available options).
 
-Now browse to Owl and start adding sites and watches: http://localhost:3000
+Now browse to Owl and start adding sites and watches: http://localhost:3000 You are now
+viewing the Dashboard.
+
+=== Adding a Site
+
+Just click the large "Add Group" button at the bottom of the page.
+
+=== Adding a Watch
+
+In each Site you'll see an "Add URL" button. Click that to add a watch. Once you have
+created a watch you can click on its name and edit it or configure alerts.
+
+If you want to set an absolute limit at which a site's response time is really considered bad,
+set the Warning Time attribute a number of milliseconds. If the site responds slower than
+this then it will blink on the Dashboard page, regardless of what color it is.
+
+If the content on a page does not match the regular expression you enter in the Content Match
+field, the site will be considered down and turn red. Likewise if the Expected Response does
+match it will be considered down. If the request to your server times out it will be considered
+down.
+
+To add alerts for a watch, you need to create it first and then edit it by clicking on the
+name in your dashboard.
 
 === Alerts
 
@@ -55,3 +91,8 @@ Delayed Job so that it can pull messages off the job queue and send them to you.
 so simply modify them to use your own Twitter and IM account connection info.
 
 SMS and Email notifications are stubbed out but have not been built as of this writing.
+
+=== Extended vs. Compact View
+
+The compact view is the original intention of Owl: being able to tell at a glance what
+state your servers are in.

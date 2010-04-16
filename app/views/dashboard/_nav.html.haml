@@ -1,0 +1,3 @@
+%ul#nav
+  %li{:class => "#{'selected' if params[:action] == 'extended'}"}= link_to 'Extended', :action => 'extended'
+  %li{:class => "#{'selected' if params[:action] == 'compact'}"}= link_to 'Compact', :action => 'compact'
