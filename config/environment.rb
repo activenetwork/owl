@@ -19,6 +19,7 @@ Rails::Initializer.run do |config|
   config.gem 'httpclient'
   config.gem 'httparty'
   config.gem 'xmpp4r-simple'
+  config.gem 'delayed_job'
   # config.gem 'system_timer'
   # config.gem 'memcache-client'
   #config.gem 'sparklines'

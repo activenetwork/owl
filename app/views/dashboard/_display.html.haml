@@ -6,7 +6,7 @@
   new Ajax.PeriodicalUpdater('','#{watches_path(:format => 'json', :site => params[:site] ? params[:site] : '')}',
                             { asynchronous:true,
                               method:'get',
-                              frequency:30,
+                              frequency:10,
                               onSuccess:function(request) {
                                 watchBlock.update(request.responseText.evalJSON());
                               }
